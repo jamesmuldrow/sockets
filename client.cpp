@@ -10,17 +10,11 @@
 using namespace std;
 
 
-//#define DATA "Hello, World!"
+#define DATA "Hello, World!"
 
 int main(int argc, char* argv[])
 {
 	string data;
-
-	if (argv[2]){
-		data = "This is a test";
-	} else {
-		data = "Hello, Sockets";
-	}
 
 	int sock;
 	struct sockaddr_in server;
@@ -37,7 +31,12 @@ int main(int argc, char* argv[])
 
 	server.sin_family = AF_INET;
 
-	hp = gethostbyname(argv[1]);
+    if (argv[1]){
+        hp = gethostbyname(argv[1]);
+    } else {
+        hp = gethostbyname("localhost");
+    }
+	
 	if(hp == 0){
 		perror("gethostbyname failed");
 		close(sock);
@@ -55,7 +54,7 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	if(send(sock, data, sizeof(data), 0) < 0)
+	if(send(sock, DATA, sizeof(DATA), 0) < 0)
 	{
 		perror("send failure");
 		close(sock);
